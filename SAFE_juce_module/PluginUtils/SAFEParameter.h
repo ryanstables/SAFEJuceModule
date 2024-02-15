@@ -30,7 +30,7 @@ public:
      *  @param UIScaleFactorInit      a factor to scale the parameter value by when
      *                                it is displayed in a user interface
      */
-    SAFEParameter (String nameInit, float& valueRef, float initialValue = 1, float minValueInit = 0, float maxValueInit = 1, String unitsInit = String::empty, float skewFactorInit = 1, bool convertDBToGainValue = false, double interpolationTimeInit = 100, float UIScaleFactorInit = 1);
+    SAFEParameter (String nameInit, float& valueRef, float initialValue = 1, float minValueInit = 0, float maxValueInit = 1, String unitsInit = String(), float skewFactorInit = 1, bool convertDBToGainValue = false, double interpolationTimeInit = 100, float UIScaleFactorInit = 1);
     ~SAFEParameter();
     
     //==========================================================================

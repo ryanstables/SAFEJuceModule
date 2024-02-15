@@ -260,7 +260,7 @@ void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)
     jassert (buffer.getNumChannels() == numChannels);
 
     int numSamples = buffer.getNumSamples();
-    float **audioData = buffer.getArrayOfWritePointers();
+    float* const* audioData = buffer.getArrayOfWritePointers();
 
     resetVampPlugins();
     clearLibXtractFeatures();
@@ -365,8 +365,8 @@ void SAFEFeatureExtractor::cacheNewFFT (int size)
         // frame size must be a power of two
         jassert (pow (2, frameOrder) == size);
 
-        fftCache.insert (std::pair <int, ScopedPointer <FFT> > (size, 
-                                                                new FFT (frameOrder, false)));
+        fftCache.insert (std::pair <int, std::unique_ptr <juce::dsp::FFT> > (size,
+                                                                new juce::dsp::FFT (frameOrder, false)));
     }
 
     if (! spectraCache.count (size))
@@ -384,7 +384,7 @@ void SAFEFeatureExtractor::calculateSpectra (const AudioSampleBuffer &frame)
         return;
     }
 
-    FFT *fft = fftCache [numSamples];
+    juce::dsp::FFT *fft = fftCache [numSamples];
     AudioSampleBuffer &spectra = spectraCache [numSamples];
 
     for (int i = 0; i < numChannels; ++i)
@@ -408,7 +408,7 @@ void SAFEFeatureExtractor::applyHannWindow (float *data, int numSamples)
 {
     for (int i = 0; i < numSamples; ++i)
     {
-        data [i] *= 0.5 * (1 - cos (2 * float_Pi * i / (numSamples - 1)));
+        data [i] *= 0.5 * (1 - cos (2 * MathConstants<float>::pi * i / (numSamples - 1)));
     }
 }
 
@@ -1138,9 +1138,9 @@ void SAFEFeatureExtractor::loadAndInitialiseVampPlugin(const VampPluginKey &key)
         return;
     }
 
-    Logger::outputDebugString ("Initialised vamp plug-in: " + key + " with:\n"
-                               "Frame Size: " + String (pluginFrameSize) + "\n"
-                               "Step Size " + String (pluginStepSize));
+    Logger::outputDebugString (String ("Initialised vamp plug-in: ") + key + String (" with:\n") +
+                               String ("Frame Size: ") + String (pluginFrameSize) + String ("\n") +
+                               String ("Step Size ") + String (pluginStepSize));
 
     addVampPluginToAnalysisConfigurations (vampPlugins.size() - 1, pluginFrameSize, pluginStepSize);
 

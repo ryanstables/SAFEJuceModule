@@ -110,7 +110,7 @@ private:
     double fs;
 
     // some fft bits
-    std::map <int, ScopedPointer <FFT> > fftCache;
+    std::map <int, std::unique_ptr <dsp::FFT> > fftCache;
     std::map <int, AudioSampleBuffer> spectraCache;
 
     void cacheNewFFT (int size);
@@ -180,7 +180,7 @@ private:
     {
         int frameSize;
         int stepSize;
-        ScopedPointer <VampPlugin> plugin;
+        std::unique_ptr <VampPlugin> plugin;
         VampOutputList outputs;
         Array <Array <AudioFeature> > featureValues;
     };

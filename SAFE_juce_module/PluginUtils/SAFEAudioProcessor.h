@@ -334,7 +334,7 @@ protected:
      *  @param UIScaleFactor         a factor to scale the parameter value by when
      *                               it is displayed in a user interface
      */
-    void addParameter (String name, float& valueRef, float initialValue = 1, float minValue = 0, float maxValue = 1, String units = String::empty, float skewFactor = 1, bool convertDBToGainValue = false, double interpolationTime = 100, float UIScaleFactor = 1);
+    void addParameter (String name, float& valueRef, float initialValue = 1, float minValue = 0, float maxValue = 1, String units = String(), float skewFactor = 1, bool convertDBToGainValue = false, double interpolationTime = 100, float UIScaleFactor = 1);
 
     /** Add a new parameter to the plugin.
      *
@@ -410,7 +410,7 @@ private:
     //      Semantic Data File Stuff
     //==========================================================================
     File semanticDataFile;
-    ScopedPointer <XmlElement> semanticDataElement;
+    std::unique_ptr <XmlElement> semanticDataElement;
     void updateSemanticDataElement();
 
     int numAnalysisFrames, currentUnprocessedAnalysisFrame, currentProcessedAnalysisFrame;
@@ -435,7 +435,7 @@ private:
     //==========================================================================
     void cacheCurrentParameters();
     bool haveParametersChanged();
-    void timerCallback();
+    void timerCallback() override;
     void resetRecording();
 
     //==========================================================================

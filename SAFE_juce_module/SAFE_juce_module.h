@@ -13,7 +13,7 @@
   description:        A module for creating SAFE plug-ins.
   website:            https://semanticaudio.co.uk
   license:            GPL
-  dependencies:       juce_core, juce_audio_processors
+  dependencies:       juce_core, juce_audio_processors, juce_dsp
   vendor:             Semantic Audio Labs
   minimumCppStandard: 14
   
@@ -25,6 +25,7 @@
 
 #include "juce_core/juce_core.h"
 #include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_dsp/juce_dsp.h"
 
 #include "vamp-hostsdk/PluginLoader.h"
 

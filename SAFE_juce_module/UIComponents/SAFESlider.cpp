@@ -125,7 +125,7 @@ void SAFESlider::setValue (double newValue, NotificationType notification)
 
     String valueString;
 
-    if (units != String::empty && useSIPrefixes)
+    if (units.isNotEmpty() && useSIPrefixes)
     {
         valueString = makeSIValueString (newValue * textBoxScaleFactor) + units;
     }
@@ -197,7 +197,7 @@ void SAFESlider::sliderValueChanged (Slider* /*movedSlider*/)
 
     String valueString;
 
-    if (units != String::empty && useSIPrefixes)
+    if (units.isNotEmpty() && useSIPrefixes)
     {
         valueString = makeSIValueString (sliderValue) + units;
     }

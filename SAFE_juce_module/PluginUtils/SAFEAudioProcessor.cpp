@@ -224,7 +224,7 @@ void SAFEAudioProcessor::setCurrentProgram (int /*index*/)
 
 const String SAFEAudioProcessor::getProgramName (int /*index*/)
 {
-    return String::empty;
+    return String();
 }
 
 void SAFEAudioProcessor::changeProgramName (int /*index*/, const String& /*newName*/)
@@ -248,7 +248,7 @@ void SAFEAudioProcessor::getStateInformation (MemoryBlock& destData)
 
 void SAFEAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    std::unique_ptr <XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
 
     if (xmlState != nullptr)
     {
