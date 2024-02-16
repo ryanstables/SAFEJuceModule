@@ -89,7 +89,7 @@ void FilterInfo::setCoefficients (Array <double> numCoeffs, Array <double> denCo
 //==========================================================================
 FilterResponse FilterInfo::getResponse (double inputFrequency) const
 {
-    std::complex <double> normalisedFrequency (0, (2 * double_Pi * inputFrequency / fs));
+    std::complex <double> normalisedFrequency (0, (2 * MathConstants<float>::pi * inputFrequency / fs));
     std::complex <double> z = pow (double_E, normalisedFrequency);
     
     std::complex <double> num (0, 0);

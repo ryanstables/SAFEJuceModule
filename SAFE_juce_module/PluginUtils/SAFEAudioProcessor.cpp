@@ -78,7 +78,7 @@ SAFEAudioProcessor::SAFEAudioProcessor()
     numInputs = 1;
     numOutputs = 1;
 
-    analysisThread = new AnalysisThread (this);
+    analysisThread = std::make_unique<AnalysisThread>(this);
 
     controlRate = 64;
     controlBlockSize = (int) (44100.0 / controlRate);
@@ -286,7 +286,7 @@ void SAFEAudioProcessor::initialiseSemanticDataFile()
     else
     {
         String elementName (JucePlugin_Name + String ("Data"));
-        semanticDataElement = new XmlElement (makeXmlString (elementName));
+        semanticDataElement = std::make_unique<XmlElement> (makeXmlString (elementName));
         semanticDataElement->writeToFile (semanticDataFile, "");
     }
 }
@@ -359,7 +359,7 @@ WarningID SAFEAudioProcessor::saveSemanticData (const String& newDescriptors, co
 {
     // separate different descriptors
     StringArray descriptors;
-    descriptors.addTokens (newDescriptors, " ,;", String::empty);
+    descriptors.addTokens (newDescriptors, " ,;", String());
     int numDescriptors = descriptors.size();
 
     updateSemanticDataElement();
@@ -390,7 +390,7 @@ WarningID SAFEAudioProcessor::saveSemanticData (const String& newDescriptors, co
 WarningID SAFEAudioProcessor::loadSemanticData (const String& descriptor)
 {
     StringArray descriptorArray;
-    descriptorArray.addTokens (descriptor, " ,;", String::empty);
+    descriptorArray.addTokens (descriptor, " ,;", String());
 
     updateSemanticDataElement();
 
@@ -496,7 +496,7 @@ WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, co
     URL dataUpload ("http://193.60.133.151/newsafe/uploadterm.php");
     dataUpload = dataUpload.withFileToUpload ("DataFile", tempDataFile, "text/xml");
 
-    ScopedPointer <InputStream> stream (dataUpload.createInputStream (true));
+    std::unique_ptr <InputStream> stream (dataUpload.createInputStream (true));
     #endif
 
     tempDataFile.deleteFile();
@@ -508,7 +508,7 @@ WarningID SAFEAudioProcessor::getServerData (const String& descriptor)
 {
     // get descriptors
     StringArray descriptorArray;
-    descriptorArray.addTokens (descriptor, " ,;", String::empty);
+    descriptorArray.addTokens (descriptor, " ,;", String());
     descriptorArray.removeEmptyStrings();
 
     if (descriptorArray.size() > 0)

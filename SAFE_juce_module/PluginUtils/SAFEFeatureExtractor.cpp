@@ -366,7 +366,7 @@ void SAFEFeatureExtractor::cacheNewFFT (int size)
         jassert (pow (2, frameOrder) == size);
 
         fftCache.insert (std::pair <int, std::unique_ptr <juce::dsp::FFT> > (size,
-                                                                new juce::dsp::FFT (frameOrder, false)));
+                                                                new juce::dsp::FFT (frameOrder)));
     }
 
     if (! spectraCache.count (size))
@@ -384,7 +384,7 @@ void SAFEFeatureExtractor::calculateSpectra (const AudioSampleBuffer &frame)
         return;
     }
 
-    juce::dsp::FFT *fft = fftCache [numSamples];
+    std::shared_ptr<dsp::FFT> fft = fftCache [numSamples];
     AudioSampleBuffer &spectra = spectraCache [numSamples];
 
     for (int i = 0; i < numChannels; ++i)
@@ -1102,9 +1102,9 @@ void SAFEFeatureExtractor::resetVampPlugins()
 
 void SAFEFeatureExtractor::loadAndInitialiseVampPlugin(const VampPluginKey &key)
 {
-    VampPlugin *newPlugin = vampPluginLoader->loadPlugin (key,
+    std::shared_ptr<VampPlugin> newPlugin (vampPluginLoader->loadPlugin (key,
                                                           fs, 
-                                                          VampPluginLoader::ADAPT_CHANNEL_COUNT);
+                                                          VampPluginLoader::ADAPT_CHANNEL_COUNT));
 
     if (newPlugin == 0)
     {
@@ -1157,7 +1157,7 @@ void SAFEFeatureExtractor::calculateVampPluginFeatures (const Array <int> &plugi
 {
     for (int i = 0; i < plugins.size(); ++i)
     {
-        VampPlugin *currentPlugin = vampPlugins [plugins [i]]->plugin;
+        std::shared_ptr<VampPlugin> currentPlugin = vampPlugins [plugins [i]]->plugin;
         VampFeatureSet features;
 
         if (currentPlugin->getInputDomain() == VampPlugin::TimeDomain)
@@ -1181,7 +1181,7 @@ void SAFEFeatureExtractor::getRemainingVampPluginFeatures()
 {
     for (int i = 0; i < vampPlugins.size(); ++i)
     {
-        VampPlugin *currentPlugin = vampPlugins [i]->plugin;
+        std::shared_ptr<VampPlugin> currentPlugin = vampPlugins [i]->plugin;
         VampFeatureSet features = currentPlugin->getRemainingFeatures();
 
         addVampPluginFeaturesToList (i, features, 0);

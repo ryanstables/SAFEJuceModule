@@ -136,7 +136,7 @@ private:
 
     SAFEMetaDataScreen metaDataScreen;
     File metaDataFile;
-    ScopedPointer <XmlElement> metaDataElement;
+    std::unique_ptr <XmlElement> metaDataElement;
 
     SAFEDescriptorLoadScreen descriptorLoadScreen;
 
@@ -151,7 +151,7 @@ private:
     int numParameters;
     const OwnedArray <SAFEParameter>& parameters;
 
-    ScopedPointer <SAFELookAndFeel> lookAndFeel;
+    std::unique_ptr <SAFELookAndFeel> lookAndFeel;
 
     //==========================================================================
     //      Show Warning Messages in Text Box

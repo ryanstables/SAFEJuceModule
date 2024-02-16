@@ -12,8 +12,8 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
       parameters (ownerFilter->getParameterArray())
 {
     // set it to use our look and feel
-    lookAndFeel = new SAFELookAndFeel;
-    setLookAndFeel (lookAndFeel);
+    lookAndFeel =  std::make_unique<SAFELookAndFeel>();
+    setLookAndFeel (lookAndFeel.get());
 
     // options for descriptor box
     descriptorBox.setWantsKeyboardFocus (true);
@@ -113,7 +113,7 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
     }
     else
     {
-        metaDataElement = new XmlElement ("MetaData");
+        metaDataElement = std::make_unique<XmlElement> ("MetaData");
     }
 
     // file access button settings

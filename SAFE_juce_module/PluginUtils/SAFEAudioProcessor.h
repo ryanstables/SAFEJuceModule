@@ -56,7 +56,7 @@ private:
         static SpinLock mutex;
     };
 
-    ScopedPointer <AnalysisThread> analysisThread;
+    std::unique_ptr <AnalysisThread> analysisThread;
 
 public:
     //==========================================================================
